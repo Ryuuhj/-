@@ -1,16 +1,7 @@
-package Level1;
+import java.util.*;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
-public class 같은숫자는싫어 {
-    public static void main(String[] args) {
-        int[] arr = {1, 1, 3, 3, 0, 1, 1};
-        for(int n : solution(arr)){
-            System.out.println(n);
-        }
-    }
-    public static int[] solution(int[] arr) {
+public class Solution {
+    public int[] solution(int []arr) {
         int[] answer = {};
         if(arr.length == 0) return answer;
         Deque<Integer> dq = new ArrayDeque<>();
