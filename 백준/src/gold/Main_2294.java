@@ -1,9 +1,9 @@
-package silver;
+package gold;
 
 import java.util.*;
 
 public class Main_2294 {
-    static int n, k, tmp, answer, mod;
+    static int n, k, tmp;
     static List<Integer> coin = new ArrayList<>();
     static int[] dp;
     public static void main(String[] args) {
