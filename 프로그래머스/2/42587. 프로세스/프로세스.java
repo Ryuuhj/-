@@ -21,17 +21,12 @@ class Solution {
         }
         return answer;
     }
-    private class Process implements Comparable<Process>{
+    private class Process{
         int idx;
         int priority;
         public Process(int idx, int pro){
             this.idx = idx;
             this.priority = pro;
-        }
-        
-        @Override
-        public int compareTo(Process o){
-            return o.priority - this.priority;
         }
     }
 }
