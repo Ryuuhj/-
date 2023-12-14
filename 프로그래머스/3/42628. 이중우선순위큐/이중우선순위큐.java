@@ -1,30 +1,33 @@
 import java.util.*;
 class Solution {
-    static ArrayList<Integer> list = new ArrayList<>();
+    static PriorityQueue<Integer> minQ = new PriorityQueue<>();
+    static PriorityQueue<Integer> maxQ = new PriorityQueue<>(Comparator.reverseOrder());
     public int[] solution(String[] operations) {
         int[] answer = new int[2];
         for (String cmd : operations) {
-            getResult(cmd.split(" "));
+            calculate(cmd);
         }
-        if(!list.isEmpty()){
-            Collections.sort(list);
-            answer[1] = list.get(0);
-            answer[0] = list.get(list.size() - 1);
+        if (!minQ.isEmpty() && !maxQ.isEmpty()) {
+            answer[0] = maxQ.poll();
+            answer[1] = minQ.poll();
         }
         return answer;
     }
 
-    private void getResult(String[] cmd) {
-        if (cmd[0].equals("I")) {
-            list.add(Integer.parseInt(cmd[1]));
-        } else {
-            if(list.isEmpty()) return;
-            Collections.sort(list);
-            if(cmd[1].equals("1")){
-                list.remove(list.size() - 1);
-            }else {
-                list.remove(0);
-            }
+    private void calculate(String cmd) {
+        switch (cmd) {
+            case "D 1":
+                if(!maxQ.isEmpty()) 
+                    minQ.remove(maxQ.poll());
+                break;
+            case "D -1":
+                if(!minQ.isEmpty())
+                    maxQ.remove(minQ.poll());
+                break;
+            default:
+                int tmp = Integer.parseInt(cmd.substring(2));
+                maxQ.offer(tmp);
+                minQ.offer(tmp);
         }
     }
 }
