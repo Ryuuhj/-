@@ -36,6 +36,7 @@ public class Main_1655 {
                     left.add(right.poll());
                 else right.add(left.poll());
             }
+
             //총 홀수개면서 오른쪽에 붙은 경우
             if (i % 2 == 1) {
                 while (left.size() <= right.size())
