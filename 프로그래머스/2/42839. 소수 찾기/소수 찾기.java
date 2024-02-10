@@ -1,45 +1,47 @@
 import java.util.*;
 
 class Solution {
-    static boolean[] used, isPrime;
-    static Set<Integer> caseNum = new HashSet<>();
-    static int len, n;
-    static char[] number;
+    boolean[] isPrime = new boolean[10000001];
+    boolean[] used;
+    Set<Integer> set = new HashSet<>();
+    int length, max = 0;
+    char[] nums;
     
     public int solution(String numbers) {
-        getPrime(10000000);
-        used = new boolean[numbers.length()];
-        number = numbers.toCharArray();
-        for(int i=1; i <=number.length; i++){
-            len = i;
-            getNum("");
-        }
-        return caseNum.size();
-    }
-    private void getNum(String now){
-        if(now.length() == len){
-            n = Integer.parseInt(now);
-            if(isPrime[n]) caseNum.add(n);
-            return;
-        }
-        for(int i=0; i < number.length; i++){
-            if(!used[i]){
-                used[i] = true;
-                getNum(now+number[i]);
-                used[i] = false;
-            }
-        }
-    }
-    
-    private void getPrime(int max){
-        isPrime = new boolean[max];
         Arrays.fill(isPrime, true);
         isPrime[0] = isPrime[1] = false;
-        for (int i = 2; i <= Math.sqrt(max-1); i++) {
-            if(isPrime[i]) {
-                for (int j = i * 2; j <= max-1; j += i) {
+        for(int i=2; i <=Math.sqrt(10000000);i++){
+            if(isPrime[i]){
+                for(int j=i*2; j<10000001; j+=i){
                     isPrime[j] = false;
                 }
+            }
+        }
+        length = numbers.length();
+        
+        nums = numbers.toCharArray();
+        used = new boolean[length];
+        
+        for(int i = 1; i <= length; i++){
+            max = i;
+            getCnt(0, new StringBuilder());
+        }
+        return set.size();
+    }
+    private void getCnt(int len, StringBuilder sb){
+        if(max == len){
+            int tmp = Integer.parseInt(sb.toString());
+            if(isPrime[tmp]) 
+                set.add(tmp);
+            return;
+        }
+        for(int i=0; i<length; i++){
+            if(!used[i]){
+                used[i] = true;
+                sb.append(nums[i]);
+                getCnt(len+1, sb);
+                sb.deleteCharAt(len);
+                used[i] = false;
             }
         }
     }
