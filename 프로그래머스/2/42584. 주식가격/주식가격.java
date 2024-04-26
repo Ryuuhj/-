@@ -1,21 +1,30 @@
 import java.util.*;
 class Solution {
-    static int idx;
     public int[] solution(int[] prices) {
-        int[] answer = new int[prices.length];
+        int N = prices.length;
+        int[] answer = new int[N];
         Stack<Integer> stack = new Stack<>();
-        for(int i=0; i<prices.length; i++){
-            while(!stack.empty() && (prices[stack.peek()] > prices[i])){
-                idx = stack.pop();
-                answer[idx] = i - idx;
+        stack.push(0);
+        for(int i=1; i < N; i++){
+            if(stack.empty()){
+                stack.push(i);
+                continue;
+            }
+            int idx = stack.peek();
+            if(prices[idx] > prices[i]){
+                while(!stack.empty() && prices[stack.peek()] > prices[i]){
+                    idx = stack.pop();
+                    answer[idx] = i - idx;
+                }
             }
             stack.push(i);
         }
-        int lastIdx = prices.length - 1;
+        N--;
         while(!stack.empty()){
-            idx = stack.pop();
-            answer[idx] = lastIdx - idx;
+            int idx = stack.pop();
+            answer[idx] = N - idx;
         }
+        
         return answer;
     }
 }
