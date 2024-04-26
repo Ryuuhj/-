@@ -1,25 +1,30 @@
 import java.util.*;
+
 class Solution {
     public String solution(int[] numbers) {
-        StringBuilder answer = new StringBuilder();
-        String[] arr = new String[numbers.length];
-        for(int i=0; i<arr.length; i++){
-            arr[i] = String.valueOf(numbers[i]);
+        String[] str = new String[numbers.length];
+        for(int i=0; i < numbers.length; i++){
+            str[i] = String.valueOf(numbers[i]);
         }
-        Arrays.sort(arr, new Comparator<String>() {
+        Arrays.sort(str, new Comparator<String>(){
             @Override
-            public int compare(String o1, String o2) {
-                StringBuilder n1 = new StringBuilder(o1);
-                StringBuilder n2 = new StringBuilder(o2);
-                n1.append(o2); n2.append(o1);
-                if(Integer.parseInt(n1.toString()) > Integer.parseInt(n2.toString())) return -1;
-                else if(Integer.parseInt(n1.toString()) < Integer.parseInt(n2.toString())) return 1;
+            public int compare(String s1, String s2){
+                StringBuilder sb1 = new StringBuilder(s1);
+                StringBuilder sb2 = new StringBuilder(s2);
+                sb1.append(s2); sb2.append(s1);
+                int n1 = Integer.parseInt(sb1.toString());
+                int n2 = Integer.parseInt(sb2.toString());
+                if(n1 > n2) return -1;
+                else if(n1 < n2) return 1;
                 return 0;
             }
         });
-        if(arr[0].equals("0")) return "0";
-        for(String n : arr){
-            answer.append(n);
+        if(str[0].equals("0"))
+            return "0";
+        
+        StringBuilder answer = new StringBuilder();
+        for(String s : str){
+            answer.append(s);
         }
         return answer.toString();
     }
