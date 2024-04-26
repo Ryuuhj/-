@@ -1,27 +1,28 @@
 import java.util.*;
+
 class Solution {
-    static long cnt;
     public long solution(int n, int[] times) {
         long answer = 0;
         Arrays.sort(times);
-        long left = 0;
-        long right = (long) times[times.length - 1] * n;
+        long front = 0, rear = (long) (times[times.length-1]) * n; //소요 시간 기준 - 0초 ~ 최대 시간
         
-        while(left <= right){
-            long mid = (left + right) / 2 ;
-            cnt = getTotal(times, mid);
-            if(cnt >= n){
+        while(front <= rear){
+            long mid = (front + rear) / 2;
+            long cnt = getCnt(times, mid);
+            if(n <= cnt){
                 answer = mid;
-                right = mid - 1;
-            }else
-                left = mid + 1;
+                rear = mid - 1;
+            } else {
+                front = mid + 1;
+            }
         }
+        
         return answer;
     }
-    private static long getTotal(int[] times, long total){
+    private long getCnt(int[] times, long total){
         long cnt = 0;
-        for(int time : times){
-            cnt += total / (long) time;
+        for(int t : times){
+            cnt += (long) total/t;
         }
         return cnt;
     }
