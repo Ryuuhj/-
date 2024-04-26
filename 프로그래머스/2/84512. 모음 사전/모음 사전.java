@@ -1,24 +1,25 @@
+import java.util.*;
+
 class Solution {
-    static int answer = -1;
     static String target;
-    static boolean find = false;
-    static String[] vowel = {"A", "E", "I", "O", "U"};
-    
+    static int ans = -1;
+    static String[] arr = {"A", "E", "I", "O", "U"};
+    static boolean flag = false;
     public int solution(String word) {
         target = word;
-        dfs("", 0);
-        return answer;
+        search("", 0);
+        return ans;
     }
-
-    private void dfs(String word, int length) {
-        if(find || length > 5) return;
-        answer++;
-        if(word.equals(target)) {
-            find = true;
+    private void search(String tmp, int length){
+        if(flag || length > 5) 
+            return;
+        ans++;
+        if(tmp.equals(target)){
+            flag = true;
             return;
         }
-        for (int i = 0; i < 5 ; i++) {
-            dfs(word + vowel[i], length + 1);
+        for(int i = 0; i < 5; i++){
+            search(tmp+arr[i], length+1);
         }
     }
 }
