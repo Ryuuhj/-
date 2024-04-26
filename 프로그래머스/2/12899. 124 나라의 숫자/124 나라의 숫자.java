@@ -1,18 +1,16 @@
 import java.util.*;
 class Solution {
-    static int mod;
     public String solution(int n) {
-        StringBuilder ans = new StringBuilder();
-        String[] number = {"4", "1", "2"};
-        
-        while(n > 0) {
-            mod = n % 3;
-            n /= 3;
+        StringBuilder sb = new StringBuilder();
+        int[] num = {4, 1, 2}; // 0=4, 1=1, 2=2로 변경
+        while(n > 0){
+            int mod = n % 3;
+            n = n / 3;
             if(mod == 0)
-                n--;
-            
-            ans.insert(0, number[mod]); //나머지 뒷자리부터 채워나감
+                n-= 1;
+            sb.insert(0, num[mod]);
         }
-        return ans.toString();
+        
+        return sb.toString();
     }
 }
