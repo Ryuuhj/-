@@ -4,78 +4,94 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    static int N, M, maxArea = 0; //세로, 가로
-    static List<Pos> space = new ArrayList<>();
-    static List<Pos> virus = new ArrayList<>();
-    static int[] dx = {1, 0, -1, 0};
-    static int[] dy = {0, -1, 0, 1};
-    private static class Pos {
-        Pos(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-        int x; int y;
-    }
+    static int N, M, maxSafeArea;
+    static int[][] map;
+    static List<Pos> bsList, virusList;
+    static int[][] dm = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        int[][] map = new int[N][M];
+        map = new int[N][M];
+        bsList = new ArrayList<>();
+        virusList = new ArrayList<>();
+
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < M; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
-                if(map[i][j] == 0)
-                    space.add(new Pos(i, j));
-                else if(map[i][j] == 2)
-                    virus.add(new Pos(i, j));
+                if (map[i][j] == 0)
+                    bsList.add(new Pos(i, j));
+                else if (map[i][j] == 2)
+                    virusList.add(new Pos(i, j));
             }
         }
-        setWall(map, -1, 0);
-        System.out.println(maxArea);
+
+        setWall(0, 0);
+
+        System.out.println(maxSafeArea);
+
     }
 
-    private static void setWall(int[][] map, int idx, int cnt) {
-        if(cnt == 3){
-            maxArea = Math.max(maxArea, getMaxArea(map));
+    private static void setWall(int index, int cnt) {
+        if (cnt == 3) {
+            spreadVirus(); //바이러스 퍼트리기 + 안전 영역 측정
             return;
         }
-        for (int i = idx + 1; i < space.size(); i++) {
-            Pos p = space.get(i);
-            map[p.x][p.y] = 1;
-            setWall(map, i, cnt + 1);
-            map[p.x][p.y] = 0;
-        }
+        if (index == bsList.size())
+            return;
+
+        int x = bsList.get(index).x;
+        int y = bsList.get(index).y;
+
+        map[x][y] = 1;
+        setWall(index + 1, cnt + 1);
+        map[x][y] = 0;
+        setWall(index + 1, cnt);
     }
 
-    private static int getMaxArea(int[][] map) {
+    private static int getSafeArea(int[][] map) {
+        int cnt = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (map[i][j] == 0)
+                    cnt++;
+            }
+        }
+        return cnt;
+    }
+
+    private static void spreadVirus() {
+        Queue<Pos> queue = new LinkedList<>(virusList);
         int[][] tmpMap = new int[N][M];
         for (int i = 0; i < N; i++) {
             tmpMap[i] = map[i].clone();
         }
-        //바이러스 퍼뜨리기
-        Queue<Pos> queue = new LinkedList<>(virus);
+
         while (!queue.isEmpty()) {
-            Pos p = queue.poll();
-            for (int i = 0; i < 4; i++) {
-                int nx = p.x + dx[i];
-                int ny = p.y + dy[i];
-                if(nx < 0 || ny < 0 || nx >= N || ny >= M || tmpMap[nx][ny] != 0) continue;
+            Pos now = queue.poll();
+            
+            for (int dir = 0; dir < 4; dir++) {
+                int nx = now.x + dm[dir][0];
+                int ny = now.y + dm[dir][1];
+                if (nx < 0 || ny < 0 || nx >= N || ny >= M || tmpMap[nx][ny] != 0) continue;
                 tmpMap[nx][ny] = 2;
                 queue.add(new Pos(nx, ny));
             }
         }
-        return calSafeZone(tmpMap);
+        maxSafeArea = Math.max(maxSafeArea, getSafeArea(tmpMap));
+   
+
     }
 
-    private static int calSafeZone(int[][] tmpMap) {
-        int area = 0;
-        for (int i = 0; i < N; i++) {
-            for (int n : tmpMap[i]) {
-                if(n == 0) area++;
-            }
+    static class Pos {
+        int x, y;
+
+        Pos(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
-        return area;
     }
 }
