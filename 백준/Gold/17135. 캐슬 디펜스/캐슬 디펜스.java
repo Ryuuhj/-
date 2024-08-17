@@ -48,9 +48,9 @@ public class Main {
         for (Pos p : enemies){
             cEnemy.add(new Pos(p.x, p.y));
         }
-        boolean[][] checked = new boolean[N][M];
+        boolean[] killed = new boolean[enemies.size()];
         int killCnt = 0;
-        
+
         //적군 죽이기
         while (!cEnemy.isEmpty()) {
             //궁수 3명을 순회하며 죽일 적군 좌표에 boolean-> true 체크
@@ -59,30 +59,30 @@ public class Main {
                 int x = -1, y = -1;
                 int minDistance = D;
                 int minY = M;
-                
-                for (Pos e : cEnemy) {
+                int idx = -1;
+
+                for (int i = 0; i < cEnemy.size(); i++) {
+                    Pos e = cEnemy.get(i);
                     //거리가 D 이하이고, minDist보다 가깝거나
                     int d = Math.abs(archer.x - e.x) + Math.abs(archer.y - e.y);
-                    
+
                     if((minDistance > d || (minDistance == d && e.y < minY))){
-                        x = e.x;
-                        y = e.y;
                         minY = e.y;
                         minDistance = d;
+                        idx = i;
                     }
                 }
-                //checked에 저장
                 
-                if(x != -1 && y != -1)
-                    checked[x][y] = true;
+                if(idx != -1)
+                    killed[idx] = true;
             }
             //궁수에 대한 순회가 끝나면 -> cEnemy 배열 돌면서 한칸 전진하고, true인 애들은 삭제해줌
             for (int i = cEnemy.size()-1; i >= 0; i--) {
                 Pos e = cEnemy.get(i);
-                if(checked[e.x][e.y]){
+                if (killed[i]) {
                     ++killCnt;
                     cEnemy.remove(i);
-                    checked[e.x][e.y] = false;
+                    killed[i] = false;
                     continue;
                 }
                 //살아 남았으면 전진, 아니면 삭제
@@ -92,7 +92,7 @@ public class Main {
                     cEnemy.get(i).x++;
                 }
             }
-            
+
         }
         maxKillCnt = Math.max(maxKillCnt, killCnt);
 
