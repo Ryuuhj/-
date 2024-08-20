@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.PriorityQueue;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -18,34 +19,29 @@ public class Main {
         }
 
         StringBuilder sb = new StringBuilder();
-        PriorityQueue<Num> pq = new PriorityQueue<>();
+        Deque<Num> deque = new ArrayDeque<>();
 
         for (int i = 0; i < N; i++) {
-            pq.offer(new Num(i, A[i]));
-            //Di 구할 차례
-            while (!pq.isEmpty()){
-                if(pq.peek().index < (i-L+1))
-                    pq.poll();
-                else {
-                    sb.append(pq.peek().value).append(" ");
+            while (!deque.isEmpty()) {
+                if(deque.peekLast().value < A[i])
                     break;
-                }
+                deque.removeLast();
             }
+            //맨 앞 수 체크
+            if(!deque.isEmpty() && deque.peekFirst().index < (i-L+1))
+                deque.removeFirst();
+            
+            deque.addLast(new Num(i, A[i]));
+            sb.append(deque.peekFirst().value).append(" ");
         }
-
         System.out.println(sb);
     }
 
-    static class Num implements Comparable<Num> {
+    static class Num {
         int index, value;
         Num(int index, int value) {
             this.index = index;
             this.value = value;
-        }
-
-        @Override
-        public int compareTo(Num o) {
-            return this.value == o.value ? this.index - o.index : this.value - o.value;
         }
     }
 }
