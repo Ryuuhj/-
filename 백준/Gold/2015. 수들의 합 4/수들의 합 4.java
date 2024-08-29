@@ -19,20 +19,21 @@ public class Main {
 		}
 		
 		HashMap<Integer, Integer> accSum = new HashMap<>();
-		accSum.put(0, 1);
 		int sum = 0, key = 0;
 		for (int i = 0; i < N; i++) {
 			sum += A[i];
 			//sum - x = K, x = sum - K 있는지 확인
 			key = sum - K;
+            
 			if(accSum.containsKey(key))
 				answer += accSum.get(key);
 			
+			if(sum == K)
+				answer++;
 			accSum.put(sum, accSum.getOrDefault(sum, 0) + 1);
 			
 		}
 		System.out.println(answer);
-
 	}
 
 }
