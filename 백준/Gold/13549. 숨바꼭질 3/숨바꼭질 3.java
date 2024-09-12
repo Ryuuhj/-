@@ -18,7 +18,6 @@ public class Main {
 		
 		Arrays.fill(minTime, INF);
 		minTime[N] = 0;
-		minTime[K] = Math.abs(N-K);;
 		PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> a.time - b.time);
 		pq.add(new Node(N, 0));
 		int next;
@@ -28,7 +27,7 @@ public class Main {
 			if(now.time > minTime[now.idx]) continue;
 			//순간이동
 			next = now.idx * 2;
-			if(next > 0 && next < 200001 && minTime[next] > now.time) {
+			if(next >= 0 && next < 200001 && minTime[next] > now.time) {
 				minTime[next] = now.time;
 				if(next != K)
 					pq.add(new Node(next, minTime[next]));
@@ -37,7 +36,7 @@ public class Main {
 			for (int i = 0; i < 2; i++) {
 				next = now.idx + dm[i];
 					
-				if(next > 0 && next < 200001 && minTime[next] > now.time+1) {
+				if(next >= 0 && next < 200001 && minTime[next] > now.time+1) {
 					minTime[next] = now.time + 1;
 					if(next != K)
 						pq.add(new Node(next, minTime[next]));
