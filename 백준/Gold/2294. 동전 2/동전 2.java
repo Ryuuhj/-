@@ -10,22 +10,24 @@ public class Main {
         int n = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
         int[] dp = new int[k + 1];
-        int[] coin = new int[n];
-        for (int i = 0; i < n; i++) {
-            coin[i] = Integer.parseInt(br.readLine());
+        Arrays.fill(dp, -1);
+        Set<Integer> input = new HashSet<>();
+        while (n-- > 0) {
+            input.add(Integer.parseInt(br.readLine()));
         }
-        Arrays.sort(coin);
-        Arrays.fill(dp, Integer.MAX_VALUE - 1);
-
+        n = input.size();
+        List<Integer> coins = new ArrayList<>(input);
+        Collections.sort(coins);
         dp[0] = 0;
         for (int i = 0; i < n; i++) {
-            int c = coin[i];
-            if(c > k) break;
-
-            for (int j = c; j <=k ; j++) {
-                dp[j] = Math.min(dp[j - c] + 1, dp[j]);
+            int c = coins.get(i);
+            for (int j = c; j < k+1; j++) {
+                if(dp[j-c] != -1) {
+                    if(dp[j] == -1) dp[j] = dp[j - c] + 1;
+                    else dp[j] = Math.min((dp[j]), dp[j - c] + 1);
+                }
             }
         }
-        System.out.println(dp[k] == Integer.MAX_VALUE - 1 ? -1 : dp[k]);
+        System.out.println(dp[k]);
     }
 }
