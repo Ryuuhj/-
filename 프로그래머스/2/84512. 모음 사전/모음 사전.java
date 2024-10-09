@@ -1,25 +1,28 @@
 import java.util.*;
-
 class Solution {
+    static int answer = 0;
     static String target;
-    static int ans = -1;
-    static String[] arr = {"A", "E", "I", "O", "U"};
     static boolean flag = false;
+    static String[] alpha = {"A", "E", "I", "O", "U"};
     public int solution(String word) {
         target = word;
-        search("", 0);
-        return ans;
+        
+        for(int i = 0; i < 5; i++){
+            dfs(alpha[i], 1);
+        }
+        
+        return answer;
     }
-    private void search(String tmp, int length){
-        if(flag || length > 5) 
-            return;
-        ans++;
-        if(tmp.equals(target)){
+    
+    private void dfs(String cur,int length){
+        if(flag || length > 5) return;
+        answer++;
+        if(cur.equals(target)){
             flag = true;
             return;
         }
         for(int i = 0; i < 5; i++){
-            search(tmp+arr[i], length+1);
+            dfs(cur + alpha[i], length+1);
         }
     }
 }
